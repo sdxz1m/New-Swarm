@@ -329,4 +329,106 @@ export const upgrades: UpgradeDefinition[] = [
     ],
     sortOrder: 100,
   },
+  {
+    id: "roachtwin",
+    unitId: "roach",
+    text: {
+      name: "双重蟑螂",
+      description: "每只幼虫可以孵化更多蟑螂。",
+    },
+    cost: [
+      { amountId: "meat", amount: "100", factor: "500" },
+      { amountId: "larva", amount: "1", factor: "50" },
+    ],
+    maxLevel: 999999,
+    effects: [
+      { type: "multiplyUnitPurchase", unitId: "roach", multiplier: "2" },
+    ],
+    sortOrder: 110,
+  },
+  {
+    id: "giantspidertwin",
+    unitId: "giantspider",
+    text: {
+      name: "双重巨蜘蛛",
+      description: "每只幼虫可以孵化更多巨蜘蛛。",
+    },
+    cost: [
+      { amountId: "meat", amount: "100", factor: "500" },
+      { amountId: "larva", amount: "1", factor: "50" },
+    ],
+    maxLevel: 999999,
+    effects: [
+      { type: "multiplyUnitPurchase", unitId: "giantspider", multiplier: "2" },
+    ],
+    sortOrder: 120,
+  },
+  {
+    id: "centipedetwin",
+    unitId: "centipede",
+    text: {
+      name: "双重蜈蚣",
+      description: "每只幼虫可以孵化更多蜈蚣。",
+    },
+    cost: [
+      { amountId: "meat", amount: "100", factor: "500" },
+      { amountId: "larva", amount: "1", factor: "50" },
+    ],
+    maxLevel: 999999,
+    effects: [
+      { type: "multiplyUnitPurchase", unitId: "centipede", multiplier: "2" },
+    ],
+    sortOrder: 130,
+  },
+  {
+    id: "wasptwin",
+    unitId: "wasp",
+    text: {
+      name: "双重黄蜂",
+      description: "每只幼虫可以孵化更多黄蜂。",
+    },
+    cost: [
+      { amountId: "meat", amount: "100", factor: "500" },
+      { amountId: "larva", amount: "1", factor: "50" },
+    ],
+    maxLevel: 999999,
+    effects: [
+      { type: "multiplyUnitPurchase", unitId: "wasp", multiplier: "2" },
+    ],
+    sortOrder: 140,
+  },
+  {
+    id: "devourertwin",
+    unitId: "devourer",
+    text: {
+      name: "双重吞噬者",
+      description: "每只幼虫可以孵化更多吞噬者。",
+    },
+    cost: [
+      { amountId: "meat", amount: "100", factor: "500" },
+      { amountId: "larva", amount: "1", factor: "50" },
+    ],
+    maxLevel: 999999,
+    effects: [
+      { type: "multiplyUnitPurchase", unitId: "devourer", multiplier: "2" },
+    ],
+    sortOrder: 150,
+  },
+  {
+    id: "goontwin",
+    unitId: "goon",
+    text: {
+      name: "双重暴徒",
+      description: "每只幼虫可以孵化更多暴徒。",
+    },
+    cost: [
+      { amountId: "meat", amount: "100", factor: "500" },
+      { amountId: "larva", amount: "1", factor: "50" },
+    ],
+    maxLevel: 999999,
+    effects: [
+      { type: "multiplyUnitPurchase", unitId: "goon", multiplier: "2" },
+    ],
+    sortOrder: 160,
+  },
 ];

@@ -222,4 +222,112 @@ export const units: UnitDefinition[] = [
     ],
     sortOrder: 65,
   },
+  {
+    id: "roach",
+    tabId: "territory",
+    text: {
+      name: "蟑螂",
+      description: "没有谁想要面对可怕的蟑螂，它们的外壳太坚硬了，几乎无法被杀死。",
+    },
+    cost: [
+      { amountId: "meat", amount: "13839600000000000" },
+      { amountId: "larva", amount: "1" },
+    ],
+    produces: [{ amountId: "territory", amountPerSecond: "12916968.75" }],
+    requires: [
+      { amountId: "meat", amount: "4151880000000000" },
+      { amountId: "queen", amount: "5" },
+    ],
+    sortOrder: 75,
+  },
+  {
+    id: "giantspider",
+    tabId: "territory",
+    text: {
+      name: "巨蜘蛛",
+      description: "蜘蛛更巨大、更可怕的近亲。",
+    },
+    cost: [
+      { amountId: "meat", amount: "6227820000000000000" },
+      { amountId: "larva", amount: "1" },
+    ],
+    produces: [{ amountId: "territory", amountPerSecond: "581263593.8" }],
+    requires: [
+      { amountId: "meat", amount: "1868350000000000000" },
+      { amountId: "queen", amount: "5" },
+    ],
+    sortOrder: 85,
+  },
+  {
+    id: "centipede",
+    tabId: "territory",
+    text: {
+      name: "蜈蚣",
+      description: "行动迅捷的蠕虫状生物，拥有数百条腿和剧毒的咬击。",
+    },
+    cost: [
+      { amountId: "meat", amount: "2.80252e+21" },
+      { amountId: "larva", amount: "1" },
+    ],
+    produces: [{ amountId: "territory", amountPerSecond: "26156861719" }],
+    requires: [
+      { amountId: "meat", amount: "840756000000000000000" },
+      { amountId: "queen", amount: "5" },
+    ],
+    sortOrder: 95,
+  },
+  {
+    id: "wasp",
+    tabId: "territory",
+    text: {
+      name: "黄蜂",
+      description: "兵蜂的高级表亲，黄蜂更凶猛，更强大。",
+    },
+    cost: [
+      { amountId: "meat", amount: "1.26113e+24" },
+      { amountId: "larva", amount: "1" },
+    ],
+    produces: [{ amountId: "territory", amountPerSecond: "1177058777344" }],
+    requires: [
+      { amountId: "meat", amount: "3.7834e+23" },
+      { amountId: "queen", amount: "5" },
+    ],
+    sortOrder: 105,
+  },
+  {
+    id: "devourer",
+    tabId: "territory",
+    text: {
+      name: "吞噬者",
+      description: "吞噬者是巨大的埋地蠕虫，它们从地底接近猎物，并在猎物还没反应过来之前就将其吞噬。",
+    },
+    cost: [
+      { amountId: "meat", amount: "5.6751e+26" },
+      { amountId: "larva", amount: "1" },
+    ],
+    produces: [{ amountId: "territory", amountPerSecond: "52967644980469" }],
+    requires: [
+      { amountId: "meat", amount: "1.70253e+26" },
+      { amountId: "queen", amount: "5" },
+    ],
+    sortOrder: 115,
+  },
+  {
+    id: "goon",
+    tabId: "territory",
+    text: {
+      name: "暴徒",
+      description: "暴徒自己无法飞行，但它们使用金属构造了强大的飞行装甲，这使它们成为了天空之主。",
+    },
+    cost: [
+      { amountId: "meat", amount: "2.5538e+29" },
+      { amountId: "larva", amount: "1" },
+    ],
+    produces: [{ amountId: "territory", amountPerSecond: "2383540000000000" }],
+    requires: [
+      { amountId: "meat", amount: "7.66139e+28" },
+      { amountId: "queen", amount: "5" },
+    ],
+    sortOrder: 125,
+  },
 ];

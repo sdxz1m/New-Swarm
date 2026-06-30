@@ -14,7 +14,13 @@ export type UnitId =
   | "stinger"
   | "spider"
   | "mosquito"
-  | "locust";
+  | "locust"
+  | "roach"
+  | "giantspider"
+  | "centipede"
+  | "wasp"
+  | "devourer"
+  | "goon";
 export type AmountId = ResourceId | UnitId;
 export type TabId = "larva" | "meat" | "territory";
 export type UpgradeId =
@@ -37,7 +43,13 @@ export type UpgradeId =
   | "stingertwin"
   | "spidertwin"
   | "mosquitotwin"
-  | "locusttwin";
+  | "locusttwin"
+  | "roachtwin"
+  | "giantspidertwin"
+  | "centipedetwin"
+  | "wasptwin"
+  | "devourertwin"
+  | "goontwin";
 
 export type NumberFormatMode = "zh" | "short" | "scientific";
 

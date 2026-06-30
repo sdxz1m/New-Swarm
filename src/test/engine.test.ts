@@ -90,4 +90,18 @@ describe("game engine", () => {
 
     expect(D(next.resources.territory).eq("31.5")).toBe(true);
   });
+
+  it("supports later migrated territory units", () => {
+    const state = {
+      ...createInitialState(0),
+      units: {
+        ...createInitialState(0).units,
+        goon: "1",
+      },
+    };
+
+    const next = tick(state, 10_000);
+
+    expect(D(next.resources.territory).eq("23835400000000000")).toBe(true);
+  });
 });
