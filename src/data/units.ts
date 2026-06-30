@@ -5,8 +5,8 @@ export const units: UnitDefinition[] = [
     id: "drone",
     tabId: "meat",
     text: {
-      name: "无人虫",
-      description: "旧版 drone：持续采集肉的基础劳工。",
+      name: "工蜂",
+      description: "工蜂是虫群最基础的工人单位。它们持续收集肉以维持虫群的温饱。",
     },
     cost: [
       { amountId: "meat", amount: "10" },
@@ -20,8 +20,8 @@ export const units: UnitDefinition[] = [
     id: "queen",
     tabId: "meat",
     text: {
-      name: "女王",
-      description: "旧版 queen：统治工虫，并持续孵化无人虫。",
+      name: "虫后",
+      description: "虫后管理着虫群的工人。",
     },
     cost: [
       { amountId: "meat", amount: "810" },
@@ -36,8 +36,8 @@ export const units: UnitDefinition[] = [
     id: "nest",
     tabId: "meat",
     text: {
-      name: "巢穴",
-      description: "旧版 nest：为女王提供空间和支持，并持续产出女王。",
+      name: "虫巢",
+      description: "虫巢为虫后提供空间和支持。",
     },
     cost: [
       { amountId: "meat", amount: "72900" },
@@ -55,8 +55,8 @@ export const units: UnitDefinition[] = [
     id: "swarmling",
     tabId: "territory",
     text: {
-      name: "虫群幼体",
-      description: "旧版 swarmling：最弱小的战士，持续夺取领地。",
+      name: "跳虫",
+      description: "虫群最小，也是最弱的战士。它们使用爪子和利齿攻击敌人，成群结队时相当凶猛。",
     },
     cost: [
       { amountId: "meat", amount: "750" },

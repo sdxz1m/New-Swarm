@@ -10,15 +10,14 @@ export interface TabDefinition {
 export const tabs: TabDefinition[] = [
   {
     id: "meat",
-    name: "肉链",
-    description: "采肉、孵化工虫和扩张繁殖链。",
+    name: "肉面板",
+    description: "工蜂、虫后和虫巢构成虫群的肉相关生产链。",
     sortOrder: 10,
   },
   {
     id: "territory",
-    name: "领地链",
-    description: "战斗单位夺取领地，解锁更高层建筑。",
+    name: "领土面板",
+    description: "军事单位占领领土，帮助虫群进行扩张。",
     sortOrder: 20,
   },
 ];
-

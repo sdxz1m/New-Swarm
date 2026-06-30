@@ -4,6 +4,8 @@
 
 当前 MVP 的初始资源、单位成本、生产值、升级成本和倍率来自 `../Old_Swarm/tables/src` 的旧版数据，不再使用临时自造数值。
 
+中文术语参考 g1tyx 的《模拟虫群》汉化版：`https://g1tyx.github.io/swarmsim/`。
+
 ## 开发
 
 ```bash

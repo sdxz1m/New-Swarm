@@ -1,6 +1,6 @@
 export const zhCN = {
-  appName: "Swarm Modern CN",
-  subtitle: "现代中文虫群原型",
+  appName: "模拟虫群",
+  subtitle: "现代中文版原型",
   units: "单位",
   upgrades: "升级",
   statistics: "统计",
@@ -20,4 +20,3 @@ export const zhCN = {
   numberFormat: "数字格式",
   close: "关闭",
 };
-
