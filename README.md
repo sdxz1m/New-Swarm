@@ -9,11 +9,25 @@ pnpm install
 pnpm dev
 ```
 
+如果使用仓库内置的本地 Node 运行时：
+
+```bash
+./scripts/pnpm.sh install
+./scripts/pnpm.sh dev
+```
+
 ## 验证
 
 ```bash
 pnpm build
 pnpm test
+```
+
+使用仓库内置的本地 Node 运行时：
+
+```bash
+./scripts/pnpm.sh build
+./scripts/pnpm.sh test
 ```
 
 ## 架构
@@ -24,4 +38,3 @@ pnpm test
 - `src/styles`：全局布局和界面样式。
 
 第一阶段保持内容量小，但数据结构按后续迁移旧版内容设计。
-
