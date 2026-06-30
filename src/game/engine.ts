@@ -3,10 +3,14 @@ import { units } from "../data/units";
 import { upgrades } from "../data/upgrades";
 import { D } from "./decimal";
 import {
+  getAmount,
+  getPurchaseMultiplier,
   getProductionRates,
   getUnitCost,
+  getUpgradeCost,
   hasCosts,
   meetsRequirements,
+  setAmount,
 } from "./formulas";
 import type {
   GameState,
@@ -36,16 +40,23 @@ export function tick(state: GameState, now = Date.now()): GameState {
 
   const rates = getProductionRates(state);
   const nextResources = { ...state.resources };
+  const nextUnits = { ...state.units };
 
   for (const resource of resources) {
     nextResources[resource.id] = D(nextResources[resource.id])
       .plus(rates[resource.id].times(seconds))
       .toString();
   }
+  for (const unit of units) {
+    nextUnits[unit.id] = D(nextUnits[unit.id])
+      .plus(rates[unit.id].times(seconds))
+      .toString();
+  }
 
   return {
     ...state,
     resources: nextResources,
+    units: nextUnits,
     updatedAt: now,
   };
 }
@@ -59,29 +70,37 @@ export function isUpgradeUnlocked(
   upgrade: UpgradeDefinition,
 ): boolean {
   const level = state.upgrades[upgrade.id] ?? 0;
-  return level < upgrade.maxLevel && meetsRequirements(state, upgrade.requires);
+  const unit = units.find((item) => item.id === upgrade.unitId);
+  return (
+    level < upgrade.maxLevel &&
+    (!unit || isUnitUnlocked(state, unit)) &&
+    meetsRequirements(state, upgrade.requires)
+  );
 }
 
 export function buyUnit(state: GameState, unitId: UnitId): GameState {
   const unit = units.find((item) => item.id === unitId);
   if (!unit || !isUnitUnlocked(state, unit)) return state;
 
-  const cost = getUnitCost(unit, D(state.units[unit.id]));
+  const cost = getUnitCost(unit);
   if (!hasCosts(state, cost)) return state;
 
-  const nextResources = { ...state.resources };
+  let next = state;
   for (const item of cost) {
-    nextResources[item.resourceId] = D(nextResources[item.resourceId])
-      .minus(item.amount)
-      .toString();
+    next = setAmount(
+      next,
+      item.amountId,
+      getAmount(next, item.amountId).minus(item.amount),
+    );
   }
 
   return {
-    ...state,
-    resources: nextResources,
+    ...next,
     units: {
-      ...state.units,
-      [unit.id]: D(state.units[unit.id]).plus(1).toString(),
+      ...next.units,
+      [unit.id]: D(next.units[unit.id])
+        .plus(getPurchaseMultiplier(state, unit.id))
+        .toString(),
     },
   };
 }
@@ -99,20 +118,23 @@ export function buyMaxUnit(state: GameState, unitId: UnitId): GameState {
 export function buyUpgrade(state: GameState, upgradeId: UpgradeId): GameState {
   const upgrade = upgrades.find((item) => item.id === upgradeId);
   if (!upgrade || !isUpgradeUnlocked(state, upgrade)) return state;
-  if (!hasCosts(state, upgrade.cost)) return state;
+  const level = state.upgrades[upgrade.id] ?? 0;
+  const cost = getUpgradeCost(upgrade, level);
+  if (!hasCosts(state, cost)) return state;
 
-  const nextResources = { ...state.resources };
-  for (const item of upgrade.cost) {
-    nextResources[item.resourceId] = D(nextResources[item.resourceId])
-      .minus(item.amount)
-      .toString();
+  let next = state;
+  for (const item of cost) {
+    next = setAmount(
+      next,
+      item.amountId,
+      getAmount(next, item.amountId).minus(item.amount),
+    );
   }
 
   return {
-    ...state,
-    resources: nextResources,
+    ...next,
     upgrades: {
-      ...state.upgrades,
+      ...next.upgrades,
       [upgrade.id]: (state.upgrades[upgrade.id] ?? 0) + 1,
     },
   };
@@ -134,4 +156,3 @@ export function setNumberFormat(
 export function resourceAmount(state: GameState, resourceId: ResourceId) {
   return D(state.resources[resourceId]);
 }
-

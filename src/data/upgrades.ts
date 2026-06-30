@@ -2,67 +2,95 @@ import type { UpgradeDefinition } from "../game/types";
 
 export const upgrades: UpgradeDefinition[] = [
   {
-    id: "droneInstinct",
+    id: "droneprod",
+    unitId: "drone",
     text: {
-      name: "采集本能",
-      description: "无人虫采集肉的效率翻倍。",
+      name: "更快的无人虫",
+      description: "旧版 droneprod：无人虫采集肉的效率翻倍。",
     },
-    cost: [{ resourceId: "meat", amount: "120" }],
-    requires: [{ unitId: "drone", amount: "10" }],
-    maxLevel: 1,
+    cost: [{ amountId: "drone", amount: "66", factor: "666" }],
+    requires: [{ amountId: "drone", amount: "67" }],
+    maxLevel: 999999,
     effects: [
       { type: "multiplyUnitProduction", unitId: "drone", multiplier: "2" },
     ],
     sortOrder: 10,
   },
   {
-    id: "queenNursing",
+    id: "queenprod",
+    unitId: "queen",
     text: {
-      name: "女王育幼",
-      description: "女王产出幼虫的速度提升 75%。",
+      name: "更快的女王",
+      description: "旧版 queenprod：女王生产无人虫的效率翻倍。",
     },
-    cost: [{ resourceId: "meat", amount: "900" }],
-    requires: [{ unitId: "queen", amount: "5" }],
-    maxLevel: 1,
+    cost: [{ amountId: "queen", amount: "66", factor: "666" }],
+    requires: [{ amountId: "queen", amount: "67" }],
+    maxLevel: 999999,
     effects: [
-      { type: "multiplyUnitProduction", unitId: "queen", multiplier: "1.75" },
+      { type: "multiplyUnitProduction", unitId: "queen", multiplier: "2" },
     ],
     sortOrder: 20,
   },
   {
-    id: "nestExpansion",
+    id: "nestprod",
+    unitId: "nest",
     text: {
-      name: "巢穴扩张",
-      description: "巢穴拓展领地的速度翻倍。",
+      name: "更快的巢穴",
+      description: "旧版 nestprod：巢穴生产女王的效率翻倍。",
     },
-    cost: [{ resourceId: "territory", amount: "3" }],
-    requires: [{ unitId: "nest", amount: "3" }],
-    maxLevel: 1,
+    cost: [{ amountId: "nest", amount: "66", factor: "666" }],
+    requires: [{ amountId: "nest", amount: "67" }],
+    maxLevel: 999999,
     effects: [
       { type: "multiplyUnitProduction", unitId: "nest", multiplier: "2" },
     ],
     sortOrder: 30,
   },
   {
-    id: "territorySurvey",
+    id: "dronetwin",
+    unitId: "drone",
     text: {
-      name: "领地测绘",
-      description: "所有领地产出提升 50%，用于验证资源倍率效果。",
+      name: "双生无人虫",
+      description: "旧版 dronetwin：每次用幼虫孵化时获得多个无人虫，不影响女王生产。",
     },
-    cost: [
-      { resourceId: "meat", amount: "2500" },
-      { resourceId: "territory", amount: "5" },
-    ],
-    requires: [{ resourceId: "territory", amount: "5" }],
-    maxLevel: 1,
+    cost: [{ amountId: "queen", amount: "1", factor: "10" }],
+    requires: [{ amountId: "queen", amount: "1" }],
+    maxLevel: 999999,
     effects: [
-      {
-        type: "multiplyResourceProduction",
-        resourceId: "territory",
-        multiplier: "1.5",
-      },
+      { type: "multiplyUnitPurchase", unitId: "drone", multiplier: "2" },
     ],
     sortOrder: 40,
   },
+  {
+    id: "queentwin",
+    unitId: "queen",
+    text: {
+      name: "双生女王",
+      description: "旧版 queentwin：每次用幼虫孵化时获得多个女王，不影响巢穴生产。",
+    },
+    cost: [{ amountId: "nest", amount: "1", factor: "10" }],
+    requires: [{ amountId: "nest", amount: "1" }],
+    maxLevel: 999999,
+    effects: [
+      { type: "multiplyUnitPurchase", unitId: "queen", multiplier: "2" },
+    ],
+    sortOrder: 50,
+  },
+  {
+    id: "swarmlingtwin",
+    unitId: "swarmling",
+    text: {
+      name: "双生虫群幼体",
+      description: "旧版 swarmlingtwin：每次用幼虫孵化时获得多个虫群幼体。",
+    },
+    cost: [
+      { amountId: "meat", amount: "100", factor: "500" },
+      { amountId: "larva", amount: "1", factor: "50" },
+    ],
+    maxLevel: 999999,
+    effects: [
+      { type: "multiplyUnitPurchase", unitId: "swarmling", multiplier: "2" },
+    ],
+    sortOrder: 60,
+  },
 ];
-

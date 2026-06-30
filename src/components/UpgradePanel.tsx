@@ -1,4 +1,9 @@
-import { hasCosts, meetsRequirements, resourceById } from "../game/formulas";
+import {
+  amountName,
+  getUpgradeCost,
+  hasCosts,
+  meetsRequirements,
+} from "../game/formulas";
 import { formatNumber } from "../game/numberFormat";
 import type {
   GameState,
@@ -27,9 +32,10 @@ export function UpgradePanel({
       <div className="upgrade-list">
         {upgrades.map((upgrade) => {
           const level = state.upgrades[upgrade.id] ?? 0;
+          const cost = getUpgradeCost(upgrade, level);
           const unlocked =
             level < upgrade.maxLevel && meetsRequirements(state, upgrade.requires);
-          const canBuy = unlocked && hasCosts(state, upgrade.cost);
+          const canBuy = unlocked && hasCosts(state, cost);
 
           return (
             <article className="upgrade-card" key={upgrade.id} aria-disabled={!unlocked}>
@@ -39,9 +45,9 @@ export function UpgradePanel({
               </div>
               <div className="cost-list">
                 {unlocked
-                  ? upgrade.cost.map((item) => (
-                      <span key={item.resourceId}>
-                        {resourceById[item.resourceId].text.name}{" "}
+                  ? cost.map((item) => (
+                      <span key={item.amountId}>
+                        {amountName(item.amountId)}{" "}
                         {formatNumber(item.amount, numberFormat)}
                       </span>
                     ))

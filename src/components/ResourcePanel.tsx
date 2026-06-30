@@ -1,11 +1,11 @@
 import { resources } from "../data/resources";
 import { D, Decimal } from "../game/decimal";
 import { formatNumber, formatRate } from "../game/numberFormat";
-import type { GameState, NumberFormatMode, ResourceId } from "../game/types";
+import type { AmountId, GameState, NumberFormatMode } from "../game/types";
 
 interface ResourcePanelProps {
   state: GameState;
-  rates: Record<ResourceId, Decimal>;
+  rates: Record<AmountId, Decimal>;
   numberFormat: NumberFormatMode;
 }
 
@@ -31,4 +31,3 @@ export function ResourcePanel({
     </section>
   );
 }
-

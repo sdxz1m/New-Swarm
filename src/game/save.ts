@@ -10,10 +10,34 @@ export function loadGame(): GameState {
   try {
     const snapshot = JSON.parse(raw) as GameSnapshot;
     if (snapshot.version !== 1) return createInitialState();
-    return snapshot.state;
+    return normalizeState(snapshot.state);
   } catch {
     return createInitialState();
   }
+}
+
+function normalizeState(state: GameState): GameState {
+  const initial = createInitialState(state.createdAt);
+  return {
+    ...initial,
+    ...state,
+    resources: {
+      ...initial.resources,
+      ...state.resources,
+    },
+    units: {
+      ...initial.units,
+      ...state.units,
+    },
+    upgrades: {
+      ...initial.upgrades,
+      ...state.upgrades,
+    },
+    options: {
+      ...initial.options,
+      ...state.options,
+    },
+  };
 }
 
 export function saveGame(state: GameState): void {

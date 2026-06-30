@@ -1,10 +1,9 @@
 import {
-  getResourceMultiplier,
+  amountName,
   getUnitCost,
   getUnitMultiplier,
   hasCosts,
   meetsRequirements,
-  resourceById,
 } from "../game/formulas";
 import { D } from "../game/decimal";
 import { formatNumber, formatRate } from "../game/numberFormat";
@@ -35,7 +34,7 @@ export function UnitList({
     <div className="unit-list">
       {units.map((unit) => {
         const unlocked = meetsRequirements(state, unit.requires);
-        const cost = getUnitCost(unit, D(state.units[unit.id]));
+        const cost = getUnitCost(unit);
         const canBuy = unlocked && hasCosts(state, cost);
 
         return (
@@ -53,13 +52,12 @@ export function UnitList({
               <strong>
                 {unit.produces
                   .map((production) =>
-                    formatRate(
-                      D(production.amountPerSecond)
-                        .times(state.units[unit.id])
-                        .times(getUnitMultiplier(state, unit.id))
-                        .times(getResourceMultiplier(state, production.resourceId)),
-                      numberFormat,
-                    ),
+                    `${amountName(production.amountId)} ${formatRate(
+                        D(production.amountPerSecond)
+                          .times(D(state.units[unit.id]).floor())
+                          .times(getUnitMultiplier(state, unit.id)),
+                        numberFormat,
+                      )}`,
                   )
                   .join(" / ")}
               </strong>
@@ -67,8 +65,8 @@ export function UnitList({
             <div className="cost-list">
               {unlocked
                 ? cost.map((item) => (
-                    <span key={item.resourceId}>
-                      {resourceById[item.resourceId].text.name}{" "}
+                    <span key={item.amountId}>
+                      {amountName(item.amountId)}{" "}
                       {formatNumber(item.amount, numberFormat)}
                     </span>
                   ))

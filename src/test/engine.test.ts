@@ -23,7 +23,6 @@ describe("game engine", () => {
     const state = buyUnit(createInitialState(0), "drone");
     const next = tick(state, 10_000);
 
-    expect(D(next.resources.meat).gte("45")).toBe(true);
+    expect(D(next.resources.meat).eq("35")).toBe(true);
   });
 });
-

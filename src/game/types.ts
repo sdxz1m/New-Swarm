@@ -1,12 +1,15 @@
 export type DecimalString = string;
 
 export type ResourceId = "meat" | "larva" | "territory";
-export type UnitId = "drone" | "queen" | "nest";
+export type UnitId = "drone" | "queen" | "nest" | "swarmling";
+export type AmountId = ResourceId | UnitId;
 export type UpgradeId =
-  | "droneInstinct"
-  | "queenNursing"
-  | "nestExpansion"
-  | "territorySurvey";
+  | "droneprod"
+  | "queenprod"
+  | "nestprod"
+  | "dronetwin"
+  | "queentwin"
+  | "swarmlingtwin";
 
 export type NumberFormatMode = "zh" | "short" | "scientific";
 
@@ -23,18 +26,18 @@ export interface ResourceDefinition {
 }
 
 export interface CostDefinition {
-  resourceId: ResourceId;
+  amountId: AmountId;
   amount: DecimalString;
+  factor?: DecimalString;
 }
 
 export interface ProductionDefinition {
-  resourceId: ResourceId;
+  amountId: AmountId;
   amountPerSecond: DecimalString;
 }
 
 export interface RequirementDefinition {
-  resourceId?: ResourceId;
-  unitId?: UnitId;
+  amountId?: AmountId;
   upgradeId?: UpgradeId;
   amount: DecimalString;
 }
@@ -43,7 +46,6 @@ export interface UnitDefinition {
   id: UnitId;
   text: LocalizedText;
   cost: CostDefinition[];
-  costGrowth: DecimalString;
   produces: ProductionDefinition[];
   requires?: RequirementDefinition[];
   sortOrder: number;
@@ -56,13 +58,14 @@ export type UpgradeEffect =
       multiplier: DecimalString;
     }
   | {
-      type: "multiplyResourceProduction";
-      resourceId: ResourceId;
+      type: "multiplyUnitPurchase";
+      unitId: UnitId;
       multiplier: DecimalString;
     };
 
 export interface UpgradeDefinition {
   id: UpgradeId;
+  unitId: UnitId;
   text: LocalizedText;
   cost: CostDefinition[];
   requires?: RequirementDefinition[];
@@ -88,4 +91,3 @@ export interface GameSnapshot {
   version: 1;
   state: GameState;
 }
-

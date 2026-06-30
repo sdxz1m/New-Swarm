@@ -3,6 +3,7 @@ import { units } from "../data/units";
 import { upgrades } from "../data/upgrades";
 import { D, Decimal, one } from "./decimal";
 import type {
+  AmountId,
   CostDefinition,
   GameState,
   RequirementDefinition,
@@ -24,18 +25,64 @@ export const upgradeById = Object.fromEntries(
   upgrades.map((upgrade) => [upgrade.id, upgrade]),
 ) as Record<UpgradeDefinition["id"], UpgradeDefinition>;
 
-export function getUnitCost(unit: UnitDefinition, owned: Decimal): CostDefinition[] {
-  const growth = D(unit.costGrowth);
+export function getAmount(state: GameState, amountId: AmountId): Decimal {
+  if (amountId in state.resources) {
+    return D(state.resources[amountId as ResourceId]);
+  }
+  return D(state.units[amountId as UnitId]);
+}
+
+export function setAmount(
+  state: GameState,
+  amountId: AmountId,
+  value: Decimal,
+): GameState {
+  if (amountId in state.resources) {
+    return {
+      ...state,
+      resources: {
+        ...state.resources,
+        [amountId]: value.toString(),
+      },
+    };
+  }
+  return {
+    ...state,
+    units: {
+      ...state.units,
+      [amountId]: value.toString(),
+    },
+  };
+}
+
+export function amountName(amountId: AmountId): string {
+  if (amountId in resourceById) {
+    return resourceById[amountId as ResourceId].text.name;
+  }
+  return unitById[amountId as UnitId].text.name;
+}
+
+export function getUnitCost(unit: UnitDefinition): CostDefinition[] {
   return unit.cost.map((cost) => ({
     ...cost,
-    amount: D(cost.amount).times(Decimal.pow(growth, owned)).toString(),
+    amount: D(cost.amount).toString(),
+  }));
+}
+
+export function getUpgradeCost(
+  upgrade: UpgradeDefinition,
+  level: number,
+): CostDefinition[] {
+  return upgrade.cost.map((cost) => ({
+    ...cost,
+    amount: D(cost.amount)
+      .times(Decimal.pow(D(cost.factor ?? "1"), level))
+      .toString(),
   }));
 }
 
 export function hasCosts(state: GameState, costs: CostDefinition[]): boolean {
-  return costs.every((cost) =>
-    D(state.resources[cost.resourceId]).gte(cost.amount),
-  );
+  return costs.every((cost) => getAmount(state, cost.amountId).gte(cost.amount));
 }
 
 export function meetsRequirements(
@@ -43,11 +90,8 @@ export function meetsRequirements(
   requirements: RequirementDefinition[] = [],
 ): boolean {
   return requirements.every((requirement) => {
-    if (requirement.resourceId) {
-      return D(state.resources[requirement.resourceId]).gte(requirement.amount);
-    }
-    if (requirement.unitId) {
-      return D(state.units[requirement.unitId]).gte(requirement.amount);
+    if (requirement.amountId) {
+      return getAmount(state, requirement.amountId).gte(requirement.amount);
     }
     if (requirement.upgradeId) {
       return (state.upgrades[requirement.upgradeId] ?? 0) >= Number(requirement.amount);
@@ -71,18 +115,19 @@ export function getUnitMultiplier(state: GameState, unitId: UnitId): Decimal {
 }
 
 export function getResourceMultiplier(
-  state: GameState,
-  resourceId: ResourceId,
+  _state: GameState,
+  _resourceId: ResourceId,
 ): Decimal {
+  return one();
+}
+
+export function getPurchaseMultiplier(state: GameState, unitId: UnitId): Decimal {
   return upgrades.reduce((total, upgrade) => {
     const level = state.upgrades[upgrade.id] ?? 0;
     if (level <= 0) return total;
 
     return upgrade.effects.reduce((inner, effect) => {
-      if (
-        effect.type !== "multiplyResourceProduction" ||
-        effect.resourceId !== resourceId
-      ) {
+      if (effect.type !== "multiplyUnitPurchase" || effect.unitId !== unitId) {
         return inner;
       }
       return inner.times(Decimal.pow(D(effect.multiplier), level));
@@ -90,31 +135,30 @@ export function getResourceMultiplier(
   }, one());
 }
 
-export function getProductionRates(state: GameState): Record<ResourceId, Decimal> {
+export function getProductionRates(
+  state: GameState,
+): Record<ResourceId | UnitId, Decimal> {
   const rates = resources.reduce(
     (acc, resource) => ({ ...acc, [resource.id]: D(0) }),
-    {} as Record<ResourceId, Decimal>,
+    {} as Record<ResourceId | UnitId, Decimal>,
   );
+  for (const unit of units) {
+    rates[unit.id] = D(0);
+  }
 
   for (const unit of units) {
-    const owned = D(state.units[unit.id]);
+    const owned = D(state.units[unit.id]).floor();
     if (owned.lte(0)) continue;
     const unitMultiplier = getUnitMultiplier(state, unit.id);
 
     for (const production of unit.produces) {
-      const resourceMultiplier = getResourceMultiplier(
-        state,
-        production.resourceId,
-      );
-      rates[production.resourceId] = rates[production.resourceId].plus(
+      rates[production.amountId] = rates[production.amountId].plus(
         owned
           .times(production.amountPerSecond)
-          .times(unitMultiplier)
-          .times(resourceMultiplier),
+          .times(unitMultiplier),
       );
     }
   }
 
   return rates;
 }
-
