@@ -1,0 +1,23 @@
+export const zhCN = {
+  appName: "Swarm Modern CN",
+  subtitle: "现代中文虫群原型",
+  units: "单位",
+  upgrades: "升级",
+  statistics: "统计",
+  settings: "设置",
+  save: "保存",
+  reset: "重置",
+  import: "导入",
+  export: "导出",
+  buy: "购买",
+  buyMax: "最大",
+  owned: "拥有",
+  production: "产量",
+  cost: "成本",
+  unavailable: "未解锁",
+  saved: "已保存",
+  unsaved: "进行中",
+  numberFormat: "数字格式",
+  close: "关闭",
+};
+
