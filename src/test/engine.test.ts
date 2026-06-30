@@ -25,4 +25,52 @@ describe("game engine", () => {
 
     expect(D(next.resources.meat).eq("35")).toBe(true);
   });
+
+  it("supports original unit-producing-unit chains", () => {
+    const state = {
+      ...createInitialState(0),
+      units: {
+        drone: "0",
+        queen: "0",
+        nest: "0",
+        greaterqueen: "1",
+        hive: "0",
+        hivequeen: "0",
+        empress: "0",
+        swarmling: "0",
+        stinger: "0",
+        spider: "0",
+        mosquito: "0",
+        locust: "0",
+      },
+    };
+
+    const next = tick(state, 10_000);
+
+    expect(D(next.units.nest).eq("40")).toBe(true);
+  });
+
+  it("supports migrated territory combat units", () => {
+    const state = {
+      ...createInitialState(0),
+      units: {
+        drone: "0",
+        queen: "0",
+        nest: "0",
+        greaterqueen: "0",
+        hive: "0",
+        hivequeen: "0",
+        empress: "0",
+        swarmling: "0",
+        stinger: "1",
+        spider: "0",
+        mosquito: "0",
+        locust: "0",
+      },
+    };
+
+    const next = tick(state, 10_000);
+
+    expect(D(next.resources.territory).eq("31.5")).toBe(true);
+  });
 });

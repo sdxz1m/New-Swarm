@@ -47,6 +47,74 @@ export const upgrades: UpgradeDefinition[] = [
     sortOrder: 30,
   },
   {
+    id: "greaterqueenprod",
+    unitId: "greaterqueen",
+    text: {
+      name: "更快的大虫后",
+      description: "大虫后可以产生更多虫巢。",
+    },
+    cost: [{ amountId: "greaterqueen", amount: "66", factor: "666" }],
+    requires: [{ amountId: "greaterqueen", amount: "67" }],
+    maxLevel: 999999,
+    effects: [
+      {
+        type: "multiplyUnitProduction",
+        unitId: "greaterqueen",
+        multiplier: "2",
+      },
+    ],
+    sortOrder: 35,
+  },
+  {
+    id: "hiveprod",
+    unitId: "hive",
+    text: {
+      name: "更快的主巢",
+      description: "主巢可以产生更多大虫后。",
+    },
+    cost: [{ amountId: "hive", amount: "66", factor: "666" }],
+    requires: [{ amountId: "hive", amount: "67" }],
+    maxLevel: 999999,
+    effects: [
+      { type: "multiplyUnitProduction", unitId: "hive", multiplier: "2" },
+    ],
+    sortOrder: 36,
+  },
+  {
+    id: "hivequeenprod",
+    unitId: "hivequeen",
+    text: {
+      name: "更快的主巢虫后",
+      description: "主巢虫后可以产生更多主巢。",
+    },
+    cost: [{ amountId: "hivequeen", amount: "66", factor: "666" }],
+    requires: [{ amountId: "hivequeen", amount: "67" }],
+    maxLevel: 999999,
+    effects: [
+      {
+        type: "multiplyUnitProduction",
+        unitId: "hivequeen",
+        multiplier: "2",
+      },
+    ],
+    sortOrder: 37,
+  },
+  {
+    id: "empressprod",
+    unitId: "empress",
+    text: {
+      name: "更快的主巢女皇",
+      description: "主巢女皇可以产生更多主巢虫后。",
+    },
+    cost: [{ amountId: "empress", amount: "66", factor: "666" }],
+    requires: [{ amountId: "empress", amount: "67" }],
+    maxLevel: 999999,
+    effects: [
+      { type: "multiplyUnitProduction", unitId: "empress", multiplier: "2" },
+    ],
+    sortOrder: 38,
+  },
+  {
     id: "dronetwin",
     unitId: "drone",
     text: {
@@ -77,6 +145,59 @@ export const upgrades: UpgradeDefinition[] = [
     sortOrder: 50,
   },
   {
+    id: "greaterqueentwin",
+    unitId: "greaterqueen",
+    text: {
+      name: "双重大虫后",
+      description: "每只幼虫可以孵化更多大虫后。不影响主巢产量。",
+    },
+    cost: [{ amountId: "hive", amount: "1", factor: "10" }],
+    requires: [{ amountId: "hive", amount: "1" }],
+    maxLevel: 999999,
+    effects: [
+      {
+        type: "multiplyUnitPurchase",
+        unitId: "greaterqueen",
+        multiplier: "2",
+      },
+    ],
+    sortOrder: 55,
+  },
+  {
+    id: "hivetwin",
+    unitId: "hive",
+    text: {
+      name: "双重主巢",
+      description: "每只幼虫可以建造更多主巢。不影响主巢虫后产量。",
+    },
+    cost: [{ amountId: "hivequeen", amount: "1", factor: "10" }],
+    requires: [{ amountId: "hivequeen", amount: "1" }],
+    maxLevel: 999999,
+    effects: [
+      { type: "multiplyUnitPurchase", unitId: "hive", multiplier: "2" },
+    ],
+    sortOrder: 56,
+  },
+  {
+    id: "hivequeentwin",
+    unitId: "hivequeen",
+    text: {
+      name: "双重主巢虫后",
+      description: "每只幼虫可以孵化更多主巢虫后。不影响主巢女皇产量。",
+    },
+    cost: [{ amountId: "empress", amount: "1", factor: "10" }],
+    requires: [{ amountId: "empress", amount: "1" }],
+    maxLevel: 999999,
+    effects: [
+      {
+        type: "multiplyUnitPurchase",
+        unitId: "hivequeen",
+        multiplier: "2",
+      },
+    ],
+    sortOrder: 57,
+  },
+  {
     id: "swarmlingtwin",
     unitId: "swarmling",
     text: {
@@ -92,5 +213,73 @@ export const upgrades: UpgradeDefinition[] = [
       { type: "multiplyUnitPurchase", unitId: "swarmling", multiplier: "2" },
     ],
     sortOrder: 60,
+  },
+  {
+    id: "stingertwin",
+    unitId: "stinger",
+    text: {
+      name: "双重兵蜂",
+      description: "每只幼虫可以孵化更多兵蜂。",
+    },
+    cost: [
+      { amountId: "meat", amount: "100", factor: "500" },
+      { amountId: "larva", amount: "1", factor: "50" },
+    ],
+    maxLevel: 999999,
+    effects: [
+      { type: "multiplyUnitPurchase", unitId: "stinger", multiplier: "2" },
+    ],
+    sortOrder: 70,
+  },
+  {
+    id: "spidertwin",
+    unitId: "spider",
+    text: {
+      name: "双重蜘蛛",
+      description: "每只幼虫可以孵化更多蜘蛛。",
+    },
+    cost: [
+      { amountId: "meat", amount: "100", factor: "500" },
+      { amountId: "larva", amount: "1", factor: "50" },
+    ],
+    maxLevel: 999999,
+    effects: [
+      { type: "multiplyUnitPurchase", unitId: "spider", multiplier: "2" },
+    ],
+    sortOrder: 80,
+  },
+  {
+    id: "mosquitotwin",
+    unitId: "mosquito",
+    text: {
+      name: "双重飞蚊",
+      description: "每只幼虫可以孵化更多飞蚊。",
+    },
+    cost: [
+      { amountId: "meat", amount: "100", factor: "500" },
+      { amountId: "larva", amount: "1", factor: "50" },
+    ],
+    maxLevel: 999999,
+    effects: [
+      { type: "multiplyUnitPurchase", unitId: "mosquito", multiplier: "2" },
+    ],
+    sortOrder: 90,
+  },
+  {
+    id: "locusttwin",
+    unitId: "locust",
+    text: {
+      name: "双重蝗虫",
+      description: "每只幼虫可以孵化更多蝗虫。",
+    },
+    cost: [
+      { amountId: "meat", amount: "100", factor: "500" },
+      { amountId: "larva", amount: "1", factor: "50" },
+    ],
+    maxLevel: 999999,
+    effects: [
+      { type: "multiplyUnitPurchase", unitId: "locust", multiplier: "2" },
+    ],
+    sortOrder: 100,
   },
 ];

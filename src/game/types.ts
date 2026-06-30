@@ -1,16 +1,39 @@
 export type DecimalString = string;
 
 export type ResourceId = "meat" | "larva" | "territory";
-export type UnitId = "drone" | "queen" | "nest" | "swarmling";
+export type UnitId =
+  | "drone"
+  | "queen"
+  | "nest"
+  | "greaterqueen"
+  | "hive"
+  | "hivequeen"
+  | "empress"
+  | "swarmling"
+  | "stinger"
+  | "spider"
+  | "mosquito"
+  | "locust";
 export type AmountId = ResourceId | UnitId;
 export type TabId = "meat" | "territory";
 export type UpgradeId =
   | "droneprod"
   | "queenprod"
   | "nestprod"
+  | "greaterqueenprod"
+  | "hiveprod"
+  | "hivequeenprod"
+  | "empressprod"
   | "dronetwin"
   | "queentwin"
-  | "swarmlingtwin";
+  | "swarmlingtwin"
+  | "greaterqueentwin"
+  | "hivetwin"
+  | "hivequeentwin"
+  | "stingertwin"
+  | "spidertwin"
+  | "mosquitotwin"
+  | "locusttwin";
 
 export type NumberFormatMode = "zh" | "short" | "scientific";
 
