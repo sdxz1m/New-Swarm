@@ -245,7 +245,7 @@ export const units: UnitDefinition[] = [
     tabId: "territory",
     text: {
       name: "巨蜘蛛",
-      description: "蜘蛛更巨大、更可怕的近亲。",
+      description: "蜘蛛的表亲，更大，更可怕。",
     },
     cost: [
       { amountId: "meat", amount: "6227820000000000000" },
@@ -263,7 +263,7 @@ export const units: UnitDefinition[] = [
     tabId: "territory",
     text: {
       name: "蜈蚣",
-      description: "行动迅捷的蠕虫状生物，拥有数百条腿和剧毒的咬击。",
+      description: "迅捷的百足虫，口器中有剧毒。",
     },
     cost: [
       { amountId: "meat", amount: "2.80252e+21" },
