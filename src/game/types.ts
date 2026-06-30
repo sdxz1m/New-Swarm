@@ -3,6 +3,7 @@ export type DecimalString = string;
 export type ResourceId = "meat" | "larva" | "territory";
 export type UnitId = "drone" | "queen" | "nest" | "swarmling";
 export type AmountId = ResourceId | UnitId;
+export type TabId = "meat" | "territory";
 export type UpgradeId =
   | "droneprod"
   | "queenprod"
@@ -44,6 +45,7 @@ export interface RequirementDefinition {
 
 export interface UnitDefinition {
   id: UnitId;
+  tabId: TabId;
   text: LocalizedText;
   cost: CostDefinition[];
   produces: ProductionDefinition[];

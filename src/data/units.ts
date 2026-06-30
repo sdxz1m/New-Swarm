@@ -3,6 +3,7 @@ import type { UnitDefinition } from "../game/types";
 export const units: UnitDefinition[] = [
   {
     id: "drone",
+    tabId: "meat",
     text: {
       name: "无人虫",
       description: "旧版 drone：持续采集肉的基础劳工。",
@@ -17,6 +18,7 @@ export const units: UnitDefinition[] = [
   },
   {
     id: "queen",
+    tabId: "meat",
     text: {
       name: "女王",
       description: "旧版 queen：统治工虫，并持续孵化无人虫。",
@@ -32,6 +34,7 @@ export const units: UnitDefinition[] = [
   },
   {
     id: "nest",
+    tabId: "meat",
     text: {
       name: "巢穴",
       description: "旧版 nest：为女王提供空间和支持，并持续产出女王。",
@@ -50,6 +53,7 @@ export const units: UnitDefinition[] = [
   },
   {
     id: "swarmling",
+    tabId: "territory",
     text: {
       name: "虫群幼体",
       description: "旧版 swarmling：最弱小的战士，持续夺取领地。",

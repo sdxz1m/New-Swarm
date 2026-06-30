@@ -1,10 +1,8 @@
 import { useEffect, useMemo, useReducer, useState } from "react";
 import { resources } from "./data/resources";
 import { units } from "./data/units";
-import { upgrades } from "./data/upgrades";
 import { ResourcePanel } from "./components/ResourcePanel";
-import { UnitList } from "./components/UnitList";
-import { UpgradePanel } from "./components/UpgradePanel";
+import { TargetWorkspace } from "./components/TargetWorkspace";
 import { SettingsDialog } from "./components/SettingsDialog";
 import {
   buyMaxUnit,
@@ -16,7 +14,13 @@ import {
 } from "./game/engine";
 import { getProductionRates } from "./game/formulas";
 import { clearGame, exportGame, importGame, loadGame, saveGame } from "./game/save";
-import type { GameState, NumberFormatMode, UnitId, UpgradeId } from "./game/types";
+import type {
+  GameState,
+  NumberFormatMode,
+  TabId,
+  UnitId,
+  UpgradeId,
+} from "./game/types";
 import { zhCN } from "./i18n/zh-CN";
 
 type Action =
@@ -52,6 +56,8 @@ export function App() {
   const [state, dispatch] = useReducer(reducer, undefined, loadGame);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [saveStatus, setSaveStatus] = useState(zhCN.unsaved);
+  const [activeTabId, setActiveTabId] = useState<TabId>("meat");
+  const [selectedUnitId, setSelectedUnitId] = useState<UnitId>("drone");
 
   useEffect(() => {
     const interval = window.setInterval(() => {
@@ -70,6 +76,16 @@ export function App() {
   const rates = useMemo(() => getProductionRates(state), [state]);
   const numberFormat = state.options.numberFormat;
 
+  function handleTabChange(tabId: TabId) {
+    setActiveTabId(tabId);
+    const firstUnit = units
+      .filter((unit) => unit.tabId === tabId)
+      .sort((a, b) => a.sortOrder - b.sortOrder)[0];
+    if (firstUnit) {
+      setSelectedUnitId(firstUnit.id);
+    }
+  }
+
   return (
     <main className="app-shell">
       <aside className="sidebar" aria-label="资源">
@@ -83,11 +99,11 @@ export function App() {
         <ResourcePanel state={state} rates={rates} numberFormat={numberFormat} />
       </aside>
 
-      <section className="workspace" aria-label="单位">
+      <section className="workspace" aria-label="目标">
         <header className="topbar">
           <div>
-            <span className="eyebrow">{zhCN.units}</span>
-            <h2>虫群孵化场</h2>
+            <span className="eyebrow">类型与目标</span>
+            <h2>虫群控制台</h2>
           </div>
           <div className="topbar-actions">
             <span className="save-status">{saveStatus}</span>
@@ -96,22 +112,21 @@ export function App() {
             </button>
           </div>
         </header>
-        <UnitList
+        <TargetWorkspace
           state={state}
           units={units}
+          activeTabId={activeTabId}
+          selectedUnitId={selectedUnitId}
           numberFormat={numberFormat}
+          onTabChange={handleTabChange}
+          onTargetChange={setSelectedUnitId}
           onBuy={(unitId) => dispatch({ type: "buyUnit", unitId })}
           onBuyMax={(unitId) => dispatch({ type: "buyMaxUnit", unitId })}
+          onBuyUpgrade={(upgradeId) => dispatch({ type: "buyUpgrade", upgradeId })}
         />
       </section>
 
-      <aside className="right-rail" aria-label="升级和统计">
-        <UpgradePanel
-          state={state}
-          upgrades={upgrades}
-          numberFormat={numberFormat}
-          onBuy={(upgradeId) => dispatch({ type: "buyUpgrade", upgradeId })}
-        />
+      <aside className="right-rail" aria-label="统计">
         <section className="stat-panel">
           <h2>{zhCN.statistics}</h2>
           <dl>
@@ -131,6 +146,12 @@ export function App() {
             </div>
           </dl>
         </section>
+        <section className="stat-panel">
+          <h2>组织方式</h2>
+          <p className="rail-note">
+            单位按原版 tab 分组；升级挂在对应目标下，后续迁移旧版内容时直接填入目标。
+          </p>
+        </section>
       </aside>
 
       <SettingsDialog
@@ -147,4 +168,3 @@ export function App() {
     </main>
   );
 }
-
