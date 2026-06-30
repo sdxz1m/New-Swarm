@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { buyUnit, createInitialState, tick } from "../game/engine";
+import { buyUnit, createInitialState, isUnitUnlocked, tick } from "../game/engine";
 import { D } from "../game/decimal";
+import { unitById } from "../game/formulas";
 
 describe("game engine", () => {
   it("creates the MVP starting resources", () => {
@@ -31,6 +32,24 @@ describe("game engine", () => {
     const next = tick(createInitialState(0), 10_000);
 
     expect(D(next.resources.larva).eq("20")).toBe(true);
+  });
+
+  it("uses original OR unlock requirements for early meat units", () => {
+    const state = {
+      ...createInitialState(0),
+      resources: {
+        ...createInitialState(0).resources,
+        territory: "1",
+      },
+      units: {
+        ...createInitialState(0).units,
+        drone: "10",
+        queen: "5",
+      },
+    };
+
+    expect(isUnitUnlocked(state, unitById.queen)).toBe(true);
+    expect(isUnitUnlocked(state, unitById.nest)).toBe(true);
   });
 
   it("supports original unit-producing-unit chains", () => {

@@ -42,7 +42,10 @@ export const units: UnitDefinition[] = [
       { amountId: "larva", amount: "1" },
     ],
     produces: [{ amountId: "drone", amountPerSecond: "2" }],
-    requires: [{ amountId: "drone", amount: "10" }],
+    requires: [
+      { externalAmountId: "ascension", amount: "1", op: "OR" },
+      { amountId: "drone", amount: "10" },
+    ],
     sortOrder: 20,
   },
   {
@@ -59,6 +62,7 @@ export const units: UnitDefinition[] = [
     ],
     produces: [{ amountId: "queen", amountPerSecond: "3" }],
     requires: [
+      { externalAmountId: "ascension", amount: "1", op: "OR" },
       { amountId: "queen", amount: "5" },
       { amountId: "territory", amount: "1" },
     ],

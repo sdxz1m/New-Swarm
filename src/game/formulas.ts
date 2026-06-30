@@ -89,15 +89,42 @@ export function meetsRequirements(
   state: GameState,
   requirements: RequirementDefinition[] = [],
 ): boolean {
-  return requirements.every((requirement) => {
+  if (!requirements.some((requirement) => requirement.op === "OR")) {
+    return requirements.every((requirement) => meetsRequirement(state, requirement));
+  }
+
+  const clauses: RequirementDefinition[][] = [];
+  let clause: RequirementDefinition[] = [];
+  for (const requirement of requirements) {
+    clause.push(requirement);
+    if (requirement.op === "OR") {
+      clauses.push(clause);
+      clause = [];
+    }
+  }
+  if (clause.length > 0) {
+    clauses.push(clause);
+  }
+
+  return clauses.some((items) =>
+    items.every((requirement) => meetsRequirement(state, requirement)),
+  );
+}
+
+function meetsRequirement(
+  state: GameState,
+  requirement: RequirementDefinition,
+): boolean {
     if (requirement.amountId) {
       return getAmount(state, requirement.amountId).gte(requirement.amount);
     }
     if (requirement.upgradeId) {
       return (state.upgrades[requirement.upgradeId] ?? 0) >= Number(requirement.amount);
     }
+    if (requirement.externalAmountId) {
+      return false;
+    }
     return true;
-  });
 }
 
 export function isUnitVisible(state: GameState, unit: UnitDefinition): boolean {

@@ -177,6 +177,21 @@ export const upgrades: UpgradeDefinition[] = [
     sortOrder: 50,
   },
   {
+    id: "nesttwin",
+    unitId: "nest",
+    text: {
+      name: "双重虫巢",
+      description: "每只幼虫可以建造更多虫巢。不影响大虫后产量。",
+    },
+    cost: [{ amountId: "greaterqueen", amount: "1", factor: "10" }],
+    requires: [{ amountId: "greaterqueen", amount: "1" }],
+    maxLevel: 999999,
+    effects: [
+      { type: "multiplyUnitPurchase", unitId: "nest", multiplier: "2" },
+    ],
+    sortOrder: 55,
+  },
+  {
     id: "greaterqueentwin",
     unitId: "greaterqueen",
     text: {
@@ -193,7 +208,7 @@ export const upgrades: UpgradeDefinition[] = [
         multiplier: "2",
       },
     ],
-    sortOrder: 55,
+    sortOrder: 56,
   },
   {
     id: "hivetwin",
@@ -208,7 +223,7 @@ export const upgrades: UpgradeDefinition[] = [
     effects: [
       { type: "multiplyUnitPurchase", unitId: "hive", multiplier: "2" },
     ],
-    sortOrder: 56,
+    sortOrder: 57,
   },
   {
     id: "hivequeentwin",
@@ -227,7 +242,7 @@ export const upgrades: UpgradeDefinition[] = [
         multiplier: "2",
       },
     ],
-    sortOrder: 57,
+    sortOrder: 58,
   },
   {
     id: "swarmlingtwin",

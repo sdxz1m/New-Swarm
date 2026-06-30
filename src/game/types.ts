@@ -29,6 +29,7 @@ export type UpgradeId =
   | "empressprod"
   | "dronetwin"
   | "queentwin"
+  | "nesttwin"
   | "swarmlingtwin"
   | "greaterqueentwin"
   | "hivetwin"
@@ -66,7 +67,9 @@ export interface ProductionDefinition {
 export interface RequirementDefinition {
   amountId?: AmountId;
   upgradeId?: UpgradeId;
+  externalAmountId?: string;
   amount: DecimalString;
+  op?: "OR";
 }
 
 export interface UnitDefinition {
