@@ -2,6 +2,7 @@ export type DecimalString = string;
 
 export type ResourceId = "meat" | "larva" | "territory";
 export type UnitId =
+  | "invisiblehatchery"
   | "drone"
   | "queen"
   | "nest"
@@ -15,8 +16,10 @@ export type UnitId =
   | "mosquito"
   | "locust";
 export type AmountId = ResourceId | UnitId;
-export type TabId = "meat" | "territory";
+export type TabId = "larva" | "meat" | "territory";
 export type UpgradeId =
+  | "hatchery"
+  | "expansion"
   | "droneprod"
   | "queenprod"
   | "nestprod"
@@ -70,6 +73,8 @@ export interface UnitDefinition {
   id: UnitId;
   tabId: TabId;
   text: LocalizedText;
+  initialAmount?: DecimalString;
+  isBuyable?: boolean;
   cost: CostDefinition[];
   produces: ProductionDefinition[];
   requires?: RequirementDefinition[];
@@ -81,6 +86,11 @@ export type UpgradeEffect =
       type: "multiplyUnitProduction";
       unitId: UnitId;
       multiplier: DecimalString;
+    }
+  | {
+      type: "addUnitProduction";
+      unitId: UnitId;
+      addend: DecimalString;
     }
   | {
       type: "multiplyUnitPurchase";

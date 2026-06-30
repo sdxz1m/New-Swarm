@@ -2,6 +2,38 @@ import type { UpgradeDefinition } from "../game/types";
 
 export const upgrades: UpgradeDefinition[] = [
   {
+    id: "hatchery",
+    unitId: "invisiblehatchery",
+    text: {
+      name: "孵化场",
+      description: "增加孵化场的幼虫产量。",
+    },
+    cost: [{ amountId: "meat", amount: "300", factor: "10" }],
+    maxLevel: 999999,
+    effects: [
+      { type: "addUnitProduction", unitId: "invisiblehatchery", addend: "1" },
+    ],
+    sortOrder: 5,
+  },
+  {
+    id: "expansion",
+    unitId: "invisiblehatchery",
+    text: {
+      name: "扩张",
+      description: "利用领土扩张孵化场，使幼虫产量提高。",
+    },
+    cost: [{ amountId: "territory", amount: "10", factor: "2.45" }],
+    maxLevel: 999999,
+    effects: [
+      {
+        type: "multiplyUnitProduction",
+        unitId: "invisiblehatchery",
+        multiplier: "1.1",
+      },
+    ],
+    sortOrder: 6,
+  },
+  {
     id: "droneprod",
     unitId: "drone",
     text: {

@@ -2,6 +2,19 @@ import type { UnitDefinition } from "../game/types";
 
 export const units: UnitDefinition[] = [
   {
+    id: "invisiblehatchery",
+    tabId: "larva",
+    text: {
+      name: "孵化场",
+      description: "孵化场是虫群幼虫的主要来源。它会持续产生幼虫。",
+    },
+    initialAmount: "1",
+    isBuyable: false,
+    cost: [],
+    produces: [{ amountId: "larva", amountPerSecond: "1" }],
+    sortOrder: 5,
+  },
+  {
     id: "drone",
     tabId: "meat",
     text: {

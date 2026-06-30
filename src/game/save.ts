@@ -56,7 +56,7 @@ export function importGame(encoded: string): GameState {
   if (snapshot.version !== 1) {
     throw new Error("Unsupported save version");
   }
-  return snapshot.state;
+  return normalizeState(snapshot.state);
 }
 
 export function clearGame(): void {

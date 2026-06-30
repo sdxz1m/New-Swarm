@@ -9,6 +9,7 @@ import {
   getUnitCost,
   getUpgradeCost,
   hasCosts,
+  isUnitVisible,
   meetsRequirements,
   setAmount,
 } from "./formulas";
@@ -26,7 +27,9 @@ export function createInitialState(now = Date.now()): GameState {
     resources: Object.fromEntries(
       resources.map((resource) => [resource.id, resource.initialAmount]),
     ) as GameState["resources"],
-    units: Object.fromEntries(units.map((unit) => [unit.id, "0"])) as GameState["units"],
+    units: Object.fromEntries(
+      units.map((unit) => [unit.id, unit.initialAmount ?? "0"]),
+    ) as GameState["units"],
     upgrades: {},
     options: { numberFormat: "zh" },
     createdAt: now,
@@ -73,14 +76,16 @@ export function isUpgradeUnlocked(
   const unit = units.find((item) => item.id === upgrade.unitId);
   return (
     level < upgrade.maxLevel &&
-    (!unit || isUnitUnlocked(state, unit)) &&
+    (!unit || isUnitVisible(state, unit)) &&
     meetsRequirements(state, upgrade.requires)
   );
 }
 
 export function buyUnit(state: GameState, unitId: UnitId): GameState {
   const unit = units.find((item) => item.id === unitId);
-  if (!unit || !isUnitUnlocked(state, unit)) return state;
+  if (!unit || unit.isBuyable === false || !isUnitUnlocked(state, unit)) {
+    return state;
+  }
 
   const cost = getUnitCost(unit);
   if (!hasCosts(state, cost)) return state;

@@ -6,8 +6,10 @@ import {
   amountName,
   getUnitCost,
   getUnitMultiplier,
+  getUnitProductionAddend,
   getUpgradeCost,
   hasCosts,
+  isUnitVisible,
   meetsRequirements,
 } from "../game/formulas";
 import { formatNumber, formatRate } from "../game/numberFormat";
@@ -46,32 +48,57 @@ export function TargetWorkspace({
   onBuyMax,
   onBuyUpgrade,
 }: TargetWorkspaceProps) {
-  const activeTab = tabs.find((tab) => tab.id === activeTabId) ?? tabs[0];
-  const tabUnits = useMemo(
+  const visibleUnits = useMemo(
     () =>
       units
-        .filter((unit) => unit.tabId === activeTab.id)
+        .filter((unit) => isUnitVisible(state, unit))
         .sort((a, b) => a.sortOrder - b.sortOrder),
-    [activeTab.id, units],
+    [state, units],
+  );
+  const visibleTabs = useMemo(
+    () =>
+      tabs
+        .filter((tab) => visibleUnits.some((unit) => unit.tabId === tab.id))
+        .sort((a, b) => a.sortOrder - b.sortOrder),
+    [visibleUnits],
+  );
+  const activeTab =
+    visibleTabs.find((tab) => tab.id === activeTabId) ?? visibleTabs[0];
+  const tabUnits = useMemo(
+    () =>
+      activeTab
+        ? visibleUnits
+            .filter((unit) => unit.tabId === activeTab.id)
+            .sort((a, b) => a.sortOrder - b.sortOrder)
+        : [],
+    [activeTab, visibleUnits],
   );
   const selectedUnit =
     tabUnits.find((unit) => unit.id === selectedUnitId) ?? tabUnits[0];
 
-  if (!selectedUnit) {
+  if (!activeTab || !selectedUnit) {
     return null;
   }
 
   const unitCost = getUnitCost(selectedUnit);
   const unitUnlocked = meetsRequirements(state, selectedUnit.requires);
-  const unitCanBuy = unitUnlocked && hasCosts(state, unitCost);
+  const unitCanBuy =
+    selectedUnit.isBuyable !== false && unitUnlocked && hasCosts(state, unitCost);
   const selectedUpgrades = upgrades
     .filter((upgrade) => upgrade.unitId === selectedUnit.id)
+    .filter((upgrade) => {
+      const level = state.upgrades[upgrade.id] ?? 0;
+      return (
+        level > 0 ||
+        (level < upgrade.maxLevel && meetsRequirements(state, upgrade.requires))
+      );
+    })
     .sort((a, b) => a.sortOrder - b.sortOrder);
 
   return (
     <div className="target-workspace">
       <nav className="tab-strip" aria-label="类型">
-        {tabs.map((tab) => (
+        {visibleTabs.map((tab) => (
           <button
             key={tab.id}
             className={tab.id === activeTab.id ? "tab-button active" : "tab-button"}
@@ -88,24 +115,18 @@ export function TargetWorkspace({
             <h3>{activeTab.name}</h3>
             <p>{activeTab.description}</p>
           </div>
-          {tabUnits.map((unit) => {
-            const unlocked = meetsRequirements(state, unit.requires);
-            return (
-              <button
-                key={unit.id}
-                className={
-                  unit.id === selectedUnit.id
-                    ? "target-button active"
-                    : "target-button"
-                }
-                onClick={() => onTargetChange(unit.id)}
-                aria-disabled={!unlocked}
-              >
-                <span>{unit.text.name}</span>
-                <strong>{formatNumber(state.units[unit.id], numberFormat)}</strong>
-              </button>
-            );
-          })}
+          {tabUnits.map((unit) => (
+            <button
+              key={unit.id}
+              className={
+                unit.id === selectedUnit.id ? "target-button active" : "target-button"
+              }
+              onClick={() => onTargetChange(unit.id)}
+            >
+              <span>{unit.text.name}</span>
+              <strong>{formatNumber(state.units[unit.id], numberFormat)}</strong>
+            </button>
+          ))}
         </aside>
 
         <section className="target-detail" aria-label={`${selectedUnit.text.name}详情`}>
@@ -133,6 +154,7 @@ export function TargetWorkspace({
                     <strong>
                       {formatRate(
                         D(production.amountPerSecond)
+                          .plus(getUnitProductionAddend(state, selectedUnit.id))
                           .times(D(state.units[selectedUnit.id]).floor())
                           .times(getUnitMultiplier(state, selectedUnit.id)),
                         numberFormat,
@@ -146,7 +168,9 @@ export function TargetWorkspace({
             <section className="target-section">
               <h3>{zhCN.cost}</h3>
               <div className="cost-list">
-                {unitUnlocked
+                {selectedUnit.isBuyable === false
+                  ? "不可直接购买"
+                  : unitUnlocked
                   ? unitCost.map((item) => (
                       <span key={item.amountId}>
                         {amountName(item.amountId)}{" "}
@@ -156,15 +180,19 @@ export function TargetWorkspace({
                   : zhCN.unavailable}
               </div>
               <div className="row-actions target-actions">
-                <button disabled={!unitCanBuy} onClick={() => onBuy(selectedUnit.id)}>
-                  {zhCN.buy}
-                </button>
-                <button
-                  disabled={!unitCanBuy}
-                  onClick={() => onBuyMax(selectedUnit.id)}
-                >
-                  {zhCN.buyMax}
-                </button>
+                {selectedUnit.isBuyable !== false && (
+                  <>
+                    <button disabled={!unitCanBuy} onClick={() => onBuy(selectedUnit.id)}>
+                      {zhCN.buy}
+                    </button>
+                    <button
+                      disabled={!unitCanBuy}
+                      onClick={() => onBuyMax(selectedUnit.id)}
+                    >
+                      {zhCN.buyMax}
+                    </button>
+                  </>
+                )}
               </div>
             </section>
 
@@ -176,7 +204,6 @@ export function TargetWorkspace({
                   const cost = getUpgradeCost(upgrade, level);
                   const unlocked =
                     level < upgrade.maxLevel &&
-                    unitUnlocked &&
                     meetsRequirements(state, upgrade.requires);
                   const canBuy = unlocked && hasCosts(state, cost);
 
@@ -217,4 +244,3 @@ export function TargetWorkspace({
     </div>
   );
 }
-

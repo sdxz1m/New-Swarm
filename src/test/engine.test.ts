@@ -9,6 +9,7 @@ describe("game engine", () => {
     expect(state.resources.meat).toBe("35");
     expect(state.resources.larva).toBe("10");
     expect(state.resources.territory).toBe("0");
+    expect(state.units.invisiblehatchery).toBe("1");
   });
 
   it("buys a drone with one larva", () => {
@@ -26,22 +27,21 @@ describe("game engine", () => {
     expect(D(next.resources.meat).eq("35")).toBe(true);
   });
 
+  it("generates larvae from the starting hatchery", () => {
+    const next = tick(createInitialState(0), 10_000);
+
+    expect(D(next.resources.larva).eq("20")).toBe(true);
+  });
+
   it("supports original unit-producing-unit chains", () => {
     const state = {
       ...createInitialState(0),
       units: {
+        ...createInitialState(0).units,
         drone: "0",
         queen: "0",
         nest: "0",
         greaterqueen: "1",
-        hive: "0",
-        hivequeen: "0",
-        empress: "0",
-        swarmling: "0",
-        stinger: "0",
-        spider: "0",
-        mosquito: "0",
-        locust: "0",
       },
     };
 
@@ -54,6 +54,7 @@ describe("game engine", () => {
     const state = {
       ...createInitialState(0),
       units: {
+        ...createInitialState(0).units,
         drone: "0",
         queen: "0",
         nest: "0",
@@ -63,9 +64,6 @@ describe("game engine", () => {
         empress: "0",
         swarmling: "0",
         stinger: "1",
-        spider: "0",
-        mosquito: "0",
-        locust: "0",
       },
     };
 

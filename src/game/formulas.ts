@@ -100,6 +100,10 @@ export function meetsRequirements(
   });
 }
 
+export function isUnitVisible(state: GameState, unit: UnitDefinition): boolean {
+  return getAmount(state, unit.id).gt(0) || meetsRequirements(state, unit.requires);
+}
+
 export function getUnitMultiplier(state: GameState, unitId: UnitId): Decimal {
   return upgrades.reduce((total, upgrade) => {
     const level = state.upgrades[upgrade.id] ?? 0;
@@ -112,6 +116,20 @@ export function getUnitMultiplier(state: GameState, unitId: UnitId): Decimal {
       return inner.times(Decimal.pow(D(effect.multiplier), level));
     }, total);
   }, one());
+}
+
+export function getUnitProductionAddend(state: GameState, unitId: UnitId): Decimal {
+  return upgrades.reduce((total, upgrade) => {
+    const level = state.upgrades[upgrade.id] ?? 0;
+    if (level <= 0) return total;
+
+    return upgrade.effects.reduce((inner, effect) => {
+      if (effect.type !== "addUnitProduction" || effect.unitId !== unitId) {
+        return inner;
+      }
+      return inner.plus(D(effect.addend).times(level));
+    }, total);
+  }, D(0));
 }
 
 export function getResourceMultiplier(
@@ -150,11 +168,12 @@ export function getProductionRates(
     const owned = D(state.units[unit.id]).floor();
     if (owned.lte(0)) continue;
     const unitMultiplier = getUnitMultiplier(state, unit.id);
+    const productionAddend = getUnitProductionAddend(state, unit.id);
 
     for (const production of unit.produces) {
       rates[production.amountId] = rates[production.amountId].plus(
         owned
-          .times(production.amountPerSecond)
+          .times(D(production.amountPerSecond).plus(productionAddend))
           .times(unitMultiplier),
       );
     }
